@@ -10,7 +10,7 @@ class UserAccessTokenNotifier extends _$UserAccessTokenNotifier {
   @override
   UserAccessToken? build() => null;
 
-  void get() async {
+  Future<void> get() async {
     final pkcePair = PkcePair.generate();
 
     // 認可コード取得
@@ -18,6 +18,9 @@ class UserAccessTokenNotifier extends _$UserAccessTokenNotifier {
 
     // アクセストークン取得
     final token = await ref.read(getUserAccessTokenUsecaseProvider).execute(code, pkcePair.codeVerifier);
+
+    // アクセストークン保存
+    await ref.read(saveUserAccessTokenUsecaseProvider).execute(token);
 
     state = token;
   }

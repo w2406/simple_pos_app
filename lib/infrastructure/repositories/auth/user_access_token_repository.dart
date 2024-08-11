@@ -16,7 +16,7 @@ class UserAccessTokenRepository implements UserAccessTokenRepositoryInterface {
     // base64エンコード
     String encoded = base64Encode(utf8.encode('${dotenv.env['client_id']}:${dotenv.env['client_secret']}'));
 
-    PostAccessTokenResponse token;
+    PostUserAccessTokenResponse token;
 
     try {
       token = await _apiClient.postAccessToken(

@@ -6,6 +6,7 @@ import 'package:simple_pos_app/infrastructure/api/api_client.dart';
 import 'package:simple_pos_app/infrastructure/data/shared_preferences.dart';
 import 'package:simple_pos_app/infrastructure/providers/repository_provider.dart';
 import 'package:simple_pos_app/infrastructure/repositories/auth/user_access_token_repository.dart';
+import 'package:simple_pos_app/infrastructure/repositories/auth/user_info_repository.dart';
 import 'package:simple_pos_app/presentation/auth/view/auth_screen.dart';
 
 void main() async {
@@ -21,6 +22,7 @@ void main() async {
   runApp(ProviderScope(
     overrides: [
       userAccessTokenRepositoryProvider.overrideWithValue(UserAccessTokenRepository(apiClient)),
+      userInfoRepositoryProvider.overrideWithValue(UserInfoRepository(apiClient)),
     ],
     child: const MyApp(),
   ));

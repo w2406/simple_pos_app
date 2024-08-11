@@ -10,18 +10,24 @@ abstract class ApiClient {
 
   @POST('/authorize/token')
   @Headers({'Content-Type': 'application/x-www-form-urlencoded'})
-  Future<PostAccessTokenResponse> postAccessToken(
+  Future<PostUserAccessTokenResponse> postAccessToken(
     @Header('Authorization') String authorization,
     @Field('grant_type') String grantType,
     @Field('code') String code,
     @Field('redirect_uri') String? redirectUri,
     @Field('code_verifier') String? codeVerifier,
   );
+
+  @POST('/userinfo')
+  Future<PostUserInfoResponse> postUserInfo(
+    @Header('Authorization') String authorization,
+  );
 }
 
 @JsonSerializable()
-class PostAccessTokenResponse {
-  factory PostAccessTokenResponse.fromJson(Map<String, dynamic> json) => _$PostAccessTokenResponseFromJson(json);
+class PostUserAccessTokenResponse {
+  factory PostUserAccessTokenResponse.fromJson(Map<String, dynamic> json) =>
+      _$PostUserAccessTokenResponseFromJson(json);
 
   final String token_type;
   final int expires_in;
@@ -30,7 +36,7 @@ class PostAccessTokenResponse {
   final String id_token;
   final String refresh_token;
 
-  const PostAccessTokenResponse(
+  const PostUserAccessTokenResponse(
       {required this.token_type,
       required this.expires_in,
       required this.access_token,
@@ -38,5 +44,38 @@ class PostAccessTokenResponse {
       required this.id_token,
       required this.refresh_token});
 
-  Map<String, dynamic> toJson() => _$PostAccessTokenResponseToJson(this);
+  Map<String, dynamic> toJson() => _$PostUserAccessTokenResponseToJson(this);
+}
+
+@JsonSerializable()
+class PostUserInfoResponse {
+  factory PostUserInfoResponse.fromJson(Map<String, dynamic> json) => _$PostUserInfoResponseFromJson(json);
+
+  final String sub;
+  final Contract contract;
+  final String name;
+  final String email;
+  final bool email_verified;
+
+  PostUserInfoResponse(
+      {required this.sub,
+      required this.contract,
+      required this.name,
+      required this.email,
+      required this.email_verified});
+
+  Map<String, dynamic> toJson() => _$PostUserInfoResponseToJson(this);
+}
+
+@JsonSerializable()
+class Contract {
+  factory Contract.fromJson(Map<String, dynamic> json) => _$ContractFromJson(json);
+
+  final String id;
+  final String user_id;
+  final bool is_owner;
+
+  Contract({required this.id, required this.user_id, required this.is_owner});
+
+  Map<String, dynamic> toJson() => _$ContractToJson(this);
 }

@@ -32,14 +32,10 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
           children: <Widget>[
             const Text('シンプルPOS'),
             ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   // アクセストークン取得
-                  ref.read(userAccessTokenNotifierProvider.notifier).get();
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) =>
-                  //             const DeviceRegistrationScreen()));
+                  await ref.read(userAccessTokenNotifierProvider.notifier).get();
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const DeviceRegistrationScreen()));
                 },
                 child: const Text('ログイン')),
           ],
