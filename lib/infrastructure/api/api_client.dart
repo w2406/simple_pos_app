@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart' hide Headers;
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:retrofit/retrofit.dart';
+import 'package:simple_pos_app/infrastructure/api/post_user_access_token/post_user_access_token_response.dart';
+import 'package:simple_pos_app/infrastructure/api/post_user_access_token_update/post_user_access_token_update_response.dart';
+import 'package:simple_pos_app/infrastructure/api/post_user_info/post_user_info_response.dart';
 
 part '../../.generated/infrastructure/api/api_client.g.dart';
 
@@ -18,64 +20,16 @@ abstract class ApiClient {
     @Field('code_verifier') String? codeVerifier,
   );
 
+  // ユーザーアクセストークン更新時はリクエストボディが違うため、別メソッドとして定義
+  @POST('/authorize/token')
+  Future<PostUserAccessTokenUpdateResponse> postAccessTokenUpdate(
+    @Header('Authorization') String authorization,
+    @Field('grant_type') String grantType,
+    @Field('refresh_token') String refreshToken,
+  );
+
   @POST('/userinfo')
   Future<PostUserInfoResponse> postUserInfo(
     @Header('Authorization') String authorization,
   );
-}
-
-@JsonSerializable()
-class PostUserAccessTokenResponse {
-  factory PostUserAccessTokenResponse.fromJson(Map<String, dynamic> json) =>
-      _$PostUserAccessTokenResponseFromJson(json);
-
-  final String token_type;
-  final int expires_in;
-  final String access_token;
-  final String scope;
-  final String id_token;
-  final String refresh_token;
-
-  const PostUserAccessTokenResponse(
-      {required this.token_type,
-      required this.expires_in,
-      required this.access_token,
-      required this.scope,
-      required this.id_token,
-      required this.refresh_token});
-
-  Map<String, dynamic> toJson() => _$PostUserAccessTokenResponseToJson(this);
-}
-
-@JsonSerializable()
-class PostUserInfoResponse {
-  factory PostUserInfoResponse.fromJson(Map<String, dynamic> json) => _$PostUserInfoResponseFromJson(json);
-
-  final String sub;
-  final Contract contract;
-  final String name;
-  final String email;
-  final bool email_verified;
-
-  PostUserInfoResponse(
-      {required this.sub,
-      required this.contract,
-      required this.name,
-      required this.email,
-      required this.email_verified});
-
-  Map<String, dynamic> toJson() => _$PostUserInfoResponseToJson(this);
-}
-
-@JsonSerializable()
-class Contract {
-  factory Contract.fromJson(Map<String, dynamic> json) => _$ContractFromJson(json);
-
-  final String id;
-  final String user_id;
-  final bool is_owner;
-
-  Contract({required this.id, required this.user_id, required this.is_owner});
-
-  Map<String, dynamic> toJson() => _$ContractToJson(this);
 }

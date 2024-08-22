@@ -5,6 +5,7 @@ import 'package:simple_pos_app/infrastructure/providers/usecase_provider.dart';
 
 part '../../../.generated/presentation/auth/view_model/user_access_token_notifier.g.dart';
 
+// トークンが取得できたかのフラグの状態管理でよいかもれない
 @riverpod
 class UserAccessTokenNotifier extends _$UserAccessTokenNotifier {
   @override
@@ -16,12 +17,12 @@ class UserAccessTokenNotifier extends _$UserAccessTokenNotifier {
     // 認可コード取得
     final code = await ref.read(getAuthorizationCodeUsecaseProvider).execute(pkcePair.codeChallenge);
 
-    // アクセストークン取得
-    final token = await ref.read(getUserAccessTokenUsecaseProvider).execute(code, pkcePair.codeVerifier);
+    // トークン取得
+    final tokens = await ref.read(getUserAccessTokenUsecaseProvider).execute(code, pkcePair.codeVerifier);
 
-    // アクセストークン保存
-    await ref.read(saveUserAccessTokenUsecaseProvider).execute(token);
+    // トークン保存
+    await ref.read(saveTokensUsecaseProvider).execute(tokens.$1, tokens.$2);
 
-    state = token;
+    state = tokens.$1;
   }
 }

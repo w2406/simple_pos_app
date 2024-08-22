@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:simple_pos_app/application/auth/commands/save_user_access_token.dart';
+import 'package:simple_pos_app/application/auth/commands/save_tokens.dart';
 import 'package:simple_pos_app/application/auth/queries/get_authorization_code.dart';
+import 'package:simple_pos_app/application/auth/queries/get_refreshToken.dart';
 import 'package:simple_pos_app/application/auth/queries/get_user_access_token.dart';
 import 'package:simple_pos_app/application/auth/queries/get_user_info.dart';
 import 'package:simple_pos_app/infrastructure/providers/repository_provider.dart';
@@ -18,8 +19,12 @@ GetUserAccessTokenUsecase getUserAccessTokenUsecase(GetUserAccessTokenUsecaseRef
     GetUserAccessTokenUsecase(ref.read(userAccessTokenRepositoryProvider));
 
 @Riverpod(keepAlive: true)
-SaveUserAccessTokenUsecase saveUserAccessTokenUsecase(SaveUserAccessTokenUsecaseRef ref) =>
-    SaveUserAccessTokenUsecase(ref.read(userAccessTokenRepositoryProvider));
+GetRefreshTokenUsecase getRefreshTokenUsecase(GetRefreshTokenUsecaseRef ref) =>
+    GetRefreshTokenUsecase(ref.read(refreshTokenRepositoryProvider));
+
+@Riverpod(keepAlive: true)
+SaveTokensUsecase saveTokensUsecase(SaveTokensUsecaseRef ref) =>
+    SaveTokensUsecase(ref.read(userAccessTokenRepositoryProvider), ref.read(refreshTokenRepositoryProvider));
 
 @Riverpod(keepAlive: true)
 GetUserInfoUsecase getUserInfoUsecase(GetUserInfoUsecaseRef ref) =>
